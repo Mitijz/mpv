@@ -32,6 +32,8 @@ Interface changes
       `--linear-downscaling`. This means that `--sigmoid-upscaling` no longer
       implies linear light downscaling as well, which was confusing.
     - the built-in `gpu-hq` profile now includes` --linear-downscaling`.
+    - remove `--macos-title-bar-style`, replaced by `--macos-title-bar-material`
+      and `--macos-title-bar-appearance`.
  --- mpv 0.29.0 ---
     - drop --opensles-sample-rate, as --audio-samplerate should be used if desired
     - drop deprecated --videotoolbox-format, --ff-aid, --ff-vid, --ff-sid,

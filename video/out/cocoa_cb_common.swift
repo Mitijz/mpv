@@ -22,6 +22,7 @@ class CocoaCB: NSObject {
 
     var mpv: MPVHelper!
     var window: Window!
+    var titleBar: TitleBar!
     var view: EventsView!
     var layer: VideoLayer!
     var link: CVDisplayLink?
@@ -95,12 +96,21 @@ class CocoaCB: NSObject {
 
         let targetScreen = getScreenBy(id: Int(opts.screen_id)) ?? NSScreen.main()
         let wr = getWindowGeometry(forScreen: targetScreen!, videoOut: vo)
-        window = Window(contentRect: wr, screen: targetScreen, view: view, cocoaCB: self)
+
+        titleBar = TitleBar(frame: wr, cocoaCB: self)
+        window = Window(contentRect: wr, screen: targetScreen, view: view,
+                        titleBar: titleBar, cocoaCB: self)
         updateICCProfile()
         window.setOnTop(Bool(opts.ontop), Int(opts.ontop_level))
         window.keepAspect = Bool(opts.keepaspect_window)
         window.title = title
         window.border = Bool(opts.border)
+
+
+        //setTitelAppearance(Int(mpv.macOpts!.macos_title_bar_appearance))
+        //setMaterial(Int(mpv.macOpts!.macos_title_bar_material))
+
+
 
         window.isRestorable = false
         window.makeMain()
@@ -499,9 +509,13 @@ class CocoaCB: NSObject {
             if let data = MPVHelper.mpvFlagToBool(property.data) {
                 window.keepAspect = data
             }
-        case "macos-title-bar-style":
+        case "macos-title-bar-appearance":
             if let data = MPVHelper.mpvStringArrayToString(property.data) {
-                window.setTitleBarStyle(data)
+                titleBar.setTitelAppearance(data)
+            }
+        case "macos-title-bar-material":
+            if let data = MPVHelper.mpvStringArrayToString(property.data) {
+                titleBar.setMaterial2(data)
             }
         default:
             break
