@@ -42,6 +42,50 @@ class CustomTtitleBar: NSVisualEffectView {
     }
 }
 
+extension NSAppearance {
+
+    convenience init?(optionName opt: String) {
+        switch opt {
+        case "1", "aqua":
+            self.init(named: NSAppearanceNameAqua)
+            return
+        case "3", "vibrantLight":
+            self.init(named: NSAppearanceNameVibrantLight)
+            return
+        case "4", "vibrantDark":
+            self.init(named: NSAppearanceNameVibrantDark)
+            return
+        default: break
+        }
+
+        if #available(macOS 10.14, *) {
+            switch opt {
+            case "2", "darkAqua":
+                self.init(named: NSAppearanceNameDarkAqua)
+                return
+            case "5", "aquaHighContrast":
+                self.init(named: NSAppearanceNameAccessibilityHighContrastAqua)
+                return
+            case "6", "darkAquaHighContrast":
+                self.init(named: NSAppearanceNameAccessibilityHighContrastDarkAqua)
+                return
+            case "7", "vibrantLightHighContrast":
+                self.init(named: NSAppearanceNameAccessibilityHighContrastVibrantLight)
+                return
+            case "8", "vibrantDarkHighContrast":
+                self.init(named: NSAppearanceNameAccessibilityHighContrastVibrantDark)
+                return
+            case "0", "auto": fallthrough
+            default:
+                return nil
+            }
+        }
+
+        let style = UserDefaults.standard.string(forKey: "AppleInterfaceStyle")
+        self.init(optionName: style == nil ? "aqua" : "vibrantDark")
+    }
+}
+
 class Window: NSWindow, NSWindowDelegate {
 
     weak var cocoaCB: CocoaCB! = nil
