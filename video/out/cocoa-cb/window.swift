@@ -168,12 +168,17 @@ class Window: NSWindow, NSWindowDelegate {
             effect = style as! String
         }
 
-        if effect == "auto" {
-            let systemStyle = UserDefaults.standard.string(forKey: "AppleInterfaceStyle")
-            effect = systemStyle == nil ? "mediumlight" : "ultradark"
-        }
-
         switch effect {
+        case "auto":
+            if #available(macOS 10.14, *) {
+                appearance = nil
+                titleBarEffect!.material = .titlebar
+                titleBarEffect!.state = .followsWindowActiveState
+            } else {
+                let systemStyle = UserDefaults.standard.string(forKey: "AppleInterfaceStyle")
+                effect = systemStyle == nil ? "mediumlight" : "ultradark"
+                setTitleBarStyle(effect)
+            }
         case "mediumlight":
             appearance = NSAppearance(named: NSAppearanceNameVibrantLight)
             titleBarEffect!.material = .titlebar
