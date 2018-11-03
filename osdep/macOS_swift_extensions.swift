@@ -15,23 +15,18 @@
  * License along with mpv.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MPV_MACOSX_APPLICATION
-#define MPV_MACOSX_APPLICATION
+import Cocoa
 
-#include "osdep/macosx_menubar.h"
-#include "options/m_option.h"
+extension NSColor {
 
-struct macos_opts {
-    int macos_title_bar_style;
-    int macos_title_bar_appearance;
-    int macos_title_bar_material;
-    struct m_color macos_title_bar_color;
-    int macos_fs_animation_duration;
-    int cocoa_cb_sw_renderer;
-};
+    convenience init(hex: String) {
+        let int = Int(hex.dropFirst(), radix: 16)
+        let alpha = CGFloat((int! >> 24) & 0x000000FF)/255
+        let red   = CGFloat((int! >> 16) & 0x000000FF)/255
+        let green = CGFloat((int! >> 8)  & 0x000000FF)/255
+        let blue  = CGFloat((int!)       & 0x000000FF)/255
 
-// multithreaded wrapper for mpv_main
-int cocoa_main(int argc, char *argv[]);
-void cocoa_register_menu_item_action(MPMenuKey key, void* action);
+        self.init(calibratedRed: red, green: green, blue: blue, alpha: alpha)
+    }
 
-#endif /* MPV_MACOSX_APPLICATION */
+}
